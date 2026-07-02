@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Was soll ich zubereiten?</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Essenswunsch</p>
+          <h1>Was soll ich dir zubereiten?</h1>
+        </div>
+        <div class="plate-art" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </section>
+
+      <form id="foodForm" class="builder">
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Gericht</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="dishes"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Ernährung</h2>
+            <p>Alles anklicken, was wichtig ist.</p>
+          </div>
+          <div class="chip-grid" data-group="diet"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Hunger</h2>
+            <p>Eine Auswahl.</p>
+          </div>
+          <div class="chip-grid" data-group="hunger"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Schärfe</h2>
+            <p>Eine Auswahl.</p>
+          </div>
+          <div class="chip-grid" data-group="spice"></div>
+        </section>
+
+        <section class="panel ingredients-panel">
+          <div class="section-heading">
+            <h2>Zutaten</h2>
+            <p id="ingredientHint">Wähle erst ein Gericht aus.</p>
+          </div>
+          <div id="ingredientGroups" class="ingredient-groups"></div>
+          <label class="field">
+            <span>Eigene Zutaten oder Wünsche</span>
+            <textarea id="customRequest" rows="4" placeholder="z.B. ohne Tomaten, extra Avocado, lieber warm serviert"></textarea>
+          </label>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="section-heading">
+            <h2>Zusammenfassung</h2>
+            <p>Kann direkt kopiert und verschickt werden.</p>
+          </div>
+          <div id="summary" class="summary-box"></div>
+          <div class="actions">
+            <button class="primary-action" type="button" id="copyButton">Zusammenfassung kopieren</button>
+            <button class="secondary-action" type="reset">Auswahl löschen</button>
+          </div>
+          <p id="copyStatus" class="copy-status" aria-live="polite"></p>
+        </section>
+      </form>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
