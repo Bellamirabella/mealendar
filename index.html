@@ -20,42 +20,47 @@
         </div>
       </section>
 
-      <form id="foodForm" class="builder">
-        <section class="panel">
+      <form id="foodForm" class="wizard">
+        <div class="progress" aria-label="Fortschritt">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="stepCount" class="step-count"></p>
+
+        <section class="step-panel is-active" data-step="0">
           <div class="section-heading">
-            <h2>Gericht</h2>
-            <p>Mehrfachauswahl möglich.</p>
+            <h2>Welches Gericht?</h2>
+            <p>Du kannst auch mehrere anklicken.</p>
           </div>
           <div class="chip-grid" data-group="dishes"></div>
         </section>
 
-        <section class="panel">
+        <section class="step-panel" data-step="1">
           <div class="section-heading">
-            <h2>Ernährung</h2>
+            <h2>Ernährung und Besonderheiten</h2>
             <p>Alles anklicken, was wichtig ist.</p>
           </div>
           <div class="chip-grid" data-group="diet"></div>
         </section>
 
-        <section class="panel">
+        <section class="step-panel" data-step="2">
           <div class="section-heading">
-            <h2>Hunger</h2>
-            <p>Eine Auswahl.</p>
+            <h2>Wie groß ist der Hunger?</h2>
+            <p>Eine Auswahl reicht.</p>
           </div>
           <div class="chip-grid" data-group="hunger"></div>
         </section>
 
-        <section class="panel">
+        <section class="step-panel" data-step="3">
           <div class="section-heading">
-            <h2>Schärfe</h2>
-            <p>Eine Auswahl.</p>
+            <h2>Mild, würzig oder scharf?</h2>
+            <p>Eine Auswahl reicht.</p>
           </div>
           <div class="chip-grid" data-group="spice"></div>
         </section>
 
-        <section class="panel ingredients-panel">
+        <section class="step-panel" data-step="4">
           <div class="section-heading">
-            <h2>Zutaten</h2>
+            <h2>Welche Zutaten?</h2>
             <p id="ingredientHint">Wähle erst ein Gericht aus.</p>
           </div>
           <div id="ingredientGroups" class="ingredient-groups"></div>
@@ -65,18 +70,23 @@
           </label>
         </section>
 
-        <section class="panel result-panel">
+        <section class="step-panel" data-step="5">
           <div class="section-heading">
-            <h2>Zusammenfassung</h2>
-            <p>Kann direkt kopiert und verschickt werden.</p>
+            <h2>Fertig</h2>
+            <p>Diese Zusammenfassung kannst du kopieren.</p>
           </div>
           <div id="summary" class="summary-box"></div>
-          <div class="actions">
+          <div class="actions final-actions">
             <button class="primary-action" type="button" id="copyButton">Zusammenfassung kopieren</button>
-            <button class="secondary-action" type="reset">Auswahl löschen</button>
+            <button class="secondary-action" type="reset">Neu starten</button>
           </div>
           <p id="copyStatus" class="copy-status" aria-live="polite"></p>
         </section>
+
+        <div class="actions nav-actions">
+          <button class="secondary-action" type="button" id="backButton">Zurück</button>
+          <button class="primary-action" type="button" id="nextButton">Weiter</button>
+        </div>
       </form>
     </main>
 

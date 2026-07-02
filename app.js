@@ -90,13 +90,20 @@ const state = {
   spice: ""
 };
 
+const stepNames = ["Gericht", "Ernährung", "Hunger", "Schärfe", "Zutaten", "Fertig"];
+let currentStep = 0;
+
 const form = document.querySelector("#foodForm");
+const progressFill = document.querySelector("#progressFill");
+const stepCount = document.querySelector("#stepCount");
 const summary = document.querySelector("#summary");
 const ingredientHint = document.querySelector("#ingredientHint");
 const ingredientGroups = document.querySelector("#ingredientGroups");
 const customRequest = document.querySelector("#customRequest");
 const copyButton = document.querySelector("#copyButton");
 const copyStatus = document.querySelector("#copyStatus");
+const backButton = document.querySelector("#backButton");
+const nextButton = document.querySelector("#nextButton");
 
 function createChip(label, group, singleChoice = false) {
   const button = document.createElement("button");
@@ -122,6 +129,14 @@ function renderOptionGroup(group, singleChoice = false) {
   options[group].forEach((label) => target.append(createChip(label, group, singleChoice)));
 }
 
+function filterIngredients(items) {
+  const blocked = new Set();
+  state.diet.forEach((diet) => {
+    (blockedByDiet[diet] || []).forEach((item) => blocked.add(item));
+  });
+  return items.filter((item) => !blocked.has(item));
+}
+
 function getSuggestedIngredients() {
   const groups = [];
   state.dishes.forEach((dish) => {
@@ -132,21 +147,23 @@ function getSuggestedIngredients() {
   state.diet.forEach((diet) => {
     filterIngredients(dietIngredientHints[diet] || []).forEach((item) => dietItems.add(item));
   });
+
   if (dietItems.size) {
     groups.push({ title: "Passend zu Ernährung", items: [...dietItems] });
   }
   return groups;
 }
 
-function filterIngredients(items) {
-  const blocked = new Set();
-  state.diet.forEach((diet) => {
-    (blockedByDiet[diet] || []).forEach((item) => blocked.add(item));
+function syncSelectedIngredientsWithDiet() {
+  state.ingredients.forEach((item) => {
+    if (!filterIngredients([item]).length) {
+      state.ingredients.delete(item);
+    }
   });
-  return items.filter((item) => !blocked.has(item));
 }
 
 function renderIngredients() {
+  syncSelectedIngredientsWithDiet();
   const groups = getSuggestedIngredients();
   ingredientGroups.innerHTML = "";
   ingredientHint.textContent = groups.length ? "Zutaten anklicken, die dabei sein sollen." : "Wähle erst ein Gericht aus.";
@@ -161,10 +178,7 @@ function renderIngredients() {
 
     const chips = document.createElement("div");
     chips.className = "chip-grid";
-    group.items.forEach((item) => {
-      const chip = createChip(item, "ingredients");
-      chips.append(chip);
-    });
+    group.items.forEach((item) => chips.append(createChip(item, "ingredients")));
 
     section.append(title, chips);
     ingredientGroups.append(section);
@@ -212,11 +226,24 @@ function buildSummary() {
   return lines.join("\n");
 }
 
+function renderStep() {
+  document.querySelectorAll(".step-panel").forEach((panel, index) => {
+    panel.classList.toggle("is-active", index === currentStep);
+  });
+
+  const progress = ((currentStep + 1) / stepNames.length) * 100;
+  progressFill.style.width = `${progress}%`;
+  stepCount.textContent = `Schritt ${currentStep + 1} von ${stepNames.length}: ${stepNames[currentStep]}`;
+  backButton.disabled = currentStep === 0;
+  nextButton.textContent = currentStep === stepNames.length - 1 ? "Zum Anfang" : "Weiter";
+}
+
 function render() {
   renderIngredients();
   updatePressedStates();
   summary.textContent = buildSummary();
   copyStatus.textContent = "";
+  renderStep();
 }
 
 function resetState() {
@@ -225,6 +252,7 @@ function resetState() {
   state.ingredients.clear();
   state.hunger = "";
   state.spice = "";
+  currentStep = 0;
   customRequest.value = "";
   render();
 }
@@ -234,6 +262,20 @@ Object.keys(options).forEach((group) => {
 });
 
 customRequest.addEventListener("input", render);
+
+backButton.addEventListener("click", () => {
+  currentStep = Math.max(0, currentStep - 1);
+  render();
+});
+
+nextButton.addEventListener("click", () => {
+  if (currentStep === stepNames.length - 1) {
+    currentStep = 0;
+  } else {
+    currentStep += 1;
+  }
+  render();
+});
 
 copyButton.addEventListener("click", async () => {
   const text = buildSummary();
