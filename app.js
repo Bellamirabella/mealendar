@@ -52,6 +52,144 @@ const options = {
   ]
 };
 
+const veganFoods = [
+    "Reis",
+    "Naturreis",
+    "Basmati",
+    "Jasminreis",
+    "Quinoa",
+    "Bulgur",
+    "Couscous",
+    "Hirse",
+    "Buchweizen",
+    "Haferflocken",
+    "Polenta",
+    "Mais",
+    "Kartoffeln",
+    "Süßkartoffeln",
+    "Nudeln ohne Ei",
+    "Glasnudeln",
+    "Reisnudeln",
+    "Brot",
+    "Brötchen",
+    "Wraps",
+    "Apfel",
+    "Banane",
+    "Birne",
+    "Orange",
+    "Mandarine",
+    "Zitrone",
+    "Limette",
+    "Mango",
+    "Ananas",
+    "Kiwi",
+    "Trauben",
+    "Erdbeeren",
+    "Himbeeren",
+    "Blaubeeren",
+    "Kirschen",
+    "Pfirsich",
+    "Nektarine",
+    "Melone",
+    "Granatapfel",
+    "Tomaten",
+    "Gurke",
+    "Paprika",
+    "Karotten",
+    "Zucchini",
+    "Aubergine",
+    "Brokkoli",
+    "Blumenkohl",
+    "Spinat",
+    "Rucola",
+    "Salat",
+    "Kohlrabi",
+    "Fenchel",
+    "Sellerie",
+    "Lauch",
+    "Zwiebeln",
+    "Knoblauch",
+    "Pilze",
+    "Kürbis",
+    "Rote Bete",
+    "Linsen",
+    "Rote Linsen",
+    "Belugalinsen",
+    "Kichererbsen",
+    "Kidneybohnen",
+    "Schwarze Bohnen",
+    "Weiße Bohnen",
+    "Erbsen",
+    "Edamame",
+    "Sojabohnen",
+    "Tofu",
+    "Räuchertofu",
+    "Seidentofu",
+    "Tempeh",
+    "Seitan",
+    "Falafel",
+    "Hummus",
+    "Veganes Hack",
+    "Vegane Nuggets",
+    "Vegane Würstchen",
+    "Lupinenprodukte",
+    "Mandeln",
+    "Walnüsse",
+    "Haselnüsse",
+    "Cashews",
+    "Pistazien",
+    "Erdnüsse",
+    "Sonnenblumenkerne",
+    "Kürbiskerne",
+    "Sesam",
+    "Chiasamen",
+    "Leinsamen",
+    "Hanfsamen",
+    "Hafermilch",
+    "Sojamilch",
+    "Mandelmilch",
+    "Reismilch",
+    "Kokosmilch",
+    "Veganer Joghurt",
+    "Vegane Sahne",
+    "Vegane Creme fraiche",
+    "Veganer Käse",
+    "Veganer Frischkäse",
+    "Olivenöl",
+    "Rapsöl",
+    "Sesamöl",
+    "Avocado",
+    "Tahini",
+    "Erdnussmus",
+    "Mandelmus",
+    "Tomatensauce",
+    "Pesto vegan",
+    "Sojasauce",
+    "Tamari",
+    "Sriracha",
+    "Senf",
+    "Ahornsirup",
+    "Agavendicksaft",
+    "Basilikum",
+    "Petersilie",
+    "Koriander",
+    "Minze",
+    "Schnittlauch",
+    "Rosmarin",
+    "Thymian",
+    "Oregano",
+    "Paprikapulver",
+    "Curry",
+    "Kurkuma",
+    "Kreuzkümmel",
+    "Chili",
+    "Pfeffer",
+    "Zimt",
+    "Ingwer"
+];
+
+options.likedFoods = veganFoods;
+
 const singleChoiceGroups = new Set(["location", "cook", "appetite"]);
 
 const state = {
@@ -61,6 +199,7 @@ const state = {
   cook: "",
   time: new Set(),
   diet: new Set(),
+  likedFoods: new Set(),
   appetite: "",
   taste: new Set(),
   breakfast: new Set(),
@@ -126,6 +265,7 @@ function getActiveSteps() {
     if (state.time.has("Mittag")) {
       steps.push("lunch");
     }
+    steps.push("likedFoods");
     steps.push("final");
   }
 
@@ -139,6 +279,7 @@ function getStepLabel(step) {
     cook: "Kochen/Backen",
     time: "Tageszeit",
     diet: "Ernährung",
+    likedFoods: "Lebensmittel",
     appetite: "Menge",
     taste: "Geschmack",
     breakfast: "Frühstück",
@@ -207,6 +348,8 @@ function buildSummary() {
     if (state.time.has("Mittag")) {
       lines.push(`Mittagswunsch: ${formatList([...state.lunch], "noch offen")}`);
     }
+
+    lines.push(`Lebensmittel, die ich mag: ${formatList([...state.likedFoods], "keine ausgewählt")}`);
   } else if (isHomeDate) {
     lines.push("Kochen/Backen: noch offen");
   }
@@ -243,6 +386,7 @@ function resetState() {
   state.cook = "";
   state.time.clear();
   state.diet.clear();
+  state.likedFoods.clear();
   state.taste.clear();
   state.breakfast.clear();
   state.lunch.clear();
