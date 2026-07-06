@@ -1,15 +1,17 @@
 const options = {
-  location: ["Bei mir", "Bei dir", "Woanders"],
+  location: ["Bei Vanessa", "Bei mir", "Woanders"],
   cook: ["Ja", "Nein"],
-  time: ["Frühstück", "Mittag", "Abend", "Kaffee/Kuchen", "Snack"],
+  time: ["Frühstück", "Mittag", "Abend", "Kaffee/Kuchen", "Snacktime"],
   diet: [
     "Vegan",
     "Vegetarisch",
     "Glutenfrei",
     "Laktosefrei",
+    "Ohne Milcheiweiß",
     "Fruktosearm",
     "Zuckerarm",
     "Zuckerfrei",
+    "Stärkefrei",
     "Low Carb",
     "Proteinreich",
     "Rohkost",
@@ -253,7 +255,7 @@ function renderOptionGroup(group) {
 
 function getActiveSteps() {
   const steps = ["date", "location"];
-  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
+  const isHomeDate = state.location === "Bei Vanessa" || state.location === "Bei mir";
 
   if (isHomeDate) {
     steps.push("cook");
@@ -278,7 +280,7 @@ function getActiveSteps() {
         steps.push("warmDinner");
       }
     }
-    if (state.time.has("Snack")) {
+    if (state.time.has("Snacktime")) {
       steps.push("snack");
     }
     steps.push("likedFoods");
@@ -344,9 +346,14 @@ function buildSummary() {
     `<strong>Ort:</strong> ${state.location || "noch offen"}${state.customLocation ? ` (${state.customLocation})` : ""}`
   ];
 
-  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
+  const isHomeDate = state.location === "Bei Vanessa" || state.location === "Bei mir";
 
-  if (!isHomeDate || state.cook === "Nein") {
+  if (state.cook === "Nein") {
+    lines.push("<strong>Kochen/Backen:</strong> Vanessa braucht nicht für mich kochen oder backen.");
+    return lines.join("\n");
+  }
+
+  if (!isHomeDate) {
     return lines.join("\n");
   }
 
@@ -374,7 +381,7 @@ function buildSummary() {
       }
     }
 
-    if (state.time.has("Snack")) {
+    if (state.time.has("Snacktime")) {
       lines.push(`<strong>Snackwunsch:</strong> ${formatList([...state.snack], "noch offen")}`);
     }
 
@@ -389,7 +396,7 @@ function buildSummary() {
 function renderStep() {
   const steps = getActiveSteps();
   const activeStep = steps[currentStep];
-  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
+  const isHomeDate = state.location === "Bei Vanessa" || state.location === "Bei mir";
 
   document.querySelectorAll(".step-panel").forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.step === activeStep);
