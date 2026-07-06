@@ -340,8 +340,8 @@ function formatDate(value) {
 
 function buildSummary() {
   const lines = [
-    `Date: ${formatDate(state.date)}`,
-    `Ort: ${state.location || "noch offen"}${state.customLocation ? ` (${state.customLocation})` : ""}`
+    `<strong>Date:</strong> ${formatDate(state.date)}`,
+    `<strong>Ort:</strong> ${state.location || "noch offen"}${state.customLocation ? ` (${state.customLocation})` : ""}`
   ];
 
   const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
@@ -352,35 +352,35 @@ function buildSummary() {
 
   if (state.cook === "Ja") {
     lines.push(
-      "Kochen/Backen: Ja",
-      `Tageszeit: ${formatList([...state.time], "noch offen")}`,
-      `Ernährung/Besonderheiten: ${formatList([...state.diet], "keine Angabe")}`,
-      `Menge: ${state.appetite || "keine Angabe"}`,
-      `Geschmack: ${formatList([...state.taste], "keine Angabe")}`
+      "<strong>Kochen/Backen:</strong> Ja",
+      `<strong>Tageszeit:</strong> ${formatList([...state.time], "noch offen")}`,
+      `<strong>Ernährung/Besonderheiten:</strong> ${formatList([...state.diet], "keine Angabe")}`,
+      `<strong>Menge:</strong> ${state.appetite || "keine Angabe"}`,
+      `<strong>Geschmack:</strong> ${formatList([...state.taste], "keine Angabe")}`
     );
 
     if (state.time.has("Frühstück")) {
-      lines.push(`Frühstückswunsch: ${formatList([...state.breakfast], "noch offen")}`);
+      lines.push(`<strong>Frühstückswunsch:</strong> ${formatList([...state.breakfast], "noch offen")}`);
     }
 
     if (state.time.has("Mittag")) {
-      lines.push(`Mittagswunsch: ${formatList([...state.lunch], "noch offen")}`);
+      lines.push(`<strong>Mittagswunsch:</strong> ${formatList([...state.lunch], "noch offen")}`);
     }
 
     if (state.time.has("Abend")) {
-      lines.push(`Abendbrotwunsch: ${formatList([...state.dinner], "noch offen")}`);
+      lines.push(`<strong>Abendbrotwunsch:</strong> ${formatList([...state.dinner], "noch offen")}`);
       if (state.dinner.has("Warmes Gericht")) {
-        lines.push(`Warmes Gericht: ${formatList([...state.warmDinner], "noch offen")}`);
+        lines.push(`<strong>Warmes Gericht:</strong> ${formatList([...state.warmDinner], "noch offen")}`);
       }
     }
 
     if (state.time.has("Snack")) {
-      lines.push(`Snackwunsch: ${formatList([...state.snack], "noch offen")}`);
+      lines.push(`<strong>Snackwunsch:</strong> ${formatList([...state.snack], "noch offen")}`);
     }
 
-    lines.push(`Lebensmittel, die ich mag: ${formatList([...state.likedFoods], "keine ausgewählt")}`);
+    lines.push(`<strong>Lebensmittel, die ich mag:</strong> ${formatList([...state.likedFoods], "keine ausgewählt")}`);
   } else if (isHomeDate) {
-    lines.push("Kochen/Backen: noch offen");
+    lines.push("<strong>Kochen/Backen:</strong> noch offen");
   }
 
   return lines.join("\n");
@@ -400,12 +400,12 @@ function renderStep() {
   stepCount.textContent = `Schritt ${currentStep + 1} von ${steps.length}: ${getStepLabel(activeStep)}`;
   backButton.disabled = currentStep === 0;
   nextButton.textContent = activeStep === "final" ? "Zum Anfang" : "Weiter";
-  finalTitle.textContent = (!isHomeDate || state.cook === "Nein") ? "Ich freue mich auf unser Date!" : "Fertig";
+  finalTitle.textContent = (!isHomeDate || state.cook === "Nein") ? "Ich freue mich auf unser Date!" : "Fertig. Ich freue mich auf Dich.";
 }
 
 function render() {
   updatePressedStates();
-  summary.textContent = buildSummary();
+  summary.innerHTML = buildSummary();
   copyStatus.textContent = "";
   renderStep();
 }
@@ -459,7 +459,7 @@ nextButton.addEventListener("click", () => {
 });
 
 copyButton.addEventListener("click", async () => {
-  const text = buildSummary();
+  const text = summary.innerText;
   try {
     await navigator.clipboard.writeText(text);
     copyStatus.textContent = "Kopiert.";
