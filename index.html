@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Was soll ich zubereiten?</title>
+    <title>Date-Essen planen</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="app-shell">
       <section class="hero">
         <div>
-          <p class="eyebrow">Essenswunsch</p>
-          <h1>Was soll ich dir zubereiten?</h1>
+          <p class="eyebrow">Date-Planung</p>
+          <h1>Was darf ich für unser Date vorbereiten?</h1>
         </div>
         <div class="plate-art" aria-hidden="true">
           <span></span>
@@ -20,21 +20,52 @@
         </div>
       </section>
 
-      <form id="foodForm" class="wizard">
+      <form id="dateForm" class="wizard">
         <div class="progress" aria-label="Fortschritt">
           <div id="progressFill" class="progress-fill"></div>
         </div>
         <p id="stepCount" class="step-count"></p>
 
-        <section class="step-panel is-active" data-step="0">
+        <section class="step-panel is-active" data-step="date">
           <div class="section-heading">
-            <h2>Welches Gericht?</h2>
-            <p>Du kannst auch mehrere anklicken.</p>
+            <h2>Wann ist unser Date?</h2>
+            <p>Wähle zuerst den Tag aus.</p>
           </div>
-          <div class="chip-grid" data-group="dishes"></div>
+          <label class="field date-field">
+            <span>Tag des Dates</span>
+            <input id="dateInput" type="date">
+          </label>
         </section>
 
-        <section class="step-panel" data-step="1">
+        <section class="step-panel" data-step="location">
+          <div class="section-heading">
+            <h2>Wo findet es statt?</h2>
+            <p>Eine Auswahl reicht.</p>
+          </div>
+          <div class="chip-grid" data-group="location"></div>
+          <label class="field">
+            <span>Falls woanders: wo?</span>
+            <input id="customLocation" type="text" placeholder="z.B. Park, Restaurant, See">
+          </label>
+        </section>
+
+        <section class="step-panel" data-step="cook">
+          <div class="section-heading">
+            <h2>Soll ich für dich kochen oder backen?</h2>
+            <p>Eine Auswahl reicht.</p>
+          </div>
+          <div class="chip-grid" data-group="cook"></div>
+        </section>
+
+        <section class="step-panel" data-step="time">
+          <div class="section-heading">
+            <h2>Welche Tageszeit passt?</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="time"></div>
+        </section>
+
+        <section class="step-panel" data-step="diet">
           <div class="section-heading">
             <h2>Ernährung und Besonderheiten</h2>
             <p>Alles anklicken, was wichtig ist.</p>
@@ -42,42 +73,46 @@
           <div class="chip-grid" data-group="diet"></div>
         </section>
 
-        <section class="step-panel" data-step="2">
+        <section class="step-panel" data-step="appetite">
           <div class="section-heading">
-            <h2>Wie groß ist der Hunger?</h2>
+            <h2>Wie viel isst du eher?</h2>
             <p>Eine Auswahl reicht.</p>
           </div>
-          <div class="chip-grid" data-group="hunger"></div>
+          <div class="chip-grid" data-group="appetite"></div>
         </section>
 
-        <section class="step-panel" data-step="3">
+        <section class="step-panel" data-step="taste">
           <div class="section-heading">
-            <h2>Mild, würzig oder scharf?</h2>
-            <p>Eine Auswahl reicht.</p>
+            <h2>Was magst du insgesamt?</h2>
+            <p>Mehrfachauswahl möglich.</p>
           </div>
-          <div class="chip-grid" data-group="spice"></div>
+          <div class="chip-grid" data-group="taste"></div>
         </section>
 
-        <section class="step-panel" data-step="4">
+        <section class="step-panel" data-step="breakfast">
           <div class="section-heading">
-            <h2>Welche Zutaten?</h2>
-            <p id="ingredientHint">Wähle erst ein Gericht aus.</p>
+            <h2>Was würdest du gern frühstücken?</h2>
+            <p>Mehrfachauswahl möglich.</p>
           </div>
-          <div id="ingredientGroups" class="ingredient-groups"></div>
-          <label class="field">
-            <span>Eigene Zutaten oder Wünsche</span>
-            <textarea id="customRequest" rows="4" placeholder="z.B. ohne Tomaten, extra Avocado, lieber warm serviert"></textarea>
-          </label>
+          <div class="chip-grid" data-group="breakfast"></div>
         </section>
 
-        <section class="step-panel" data-step="5">
+        <section class="step-panel" data-step="lunch">
+          <div class="section-heading">
+            <h2>Was würdest du mittags gern essen?</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="lunch"></div>
+        </section>
+
+        <section class="step-panel" data-step="final">
           <div class="section-heading">
             <h2>Fertig</h2>
-            <p>Diese Zusammenfassung kannst du kopieren.</p>
+            <p>Diese Antwort kannst du kopieren.</p>
           </div>
           <div id="summary" class="summary-box"></div>
           <div class="actions final-actions">
-            <button class="primary-action" type="button" id="copyButton">Zusammenfassung kopieren</button>
+            <button class="primary-action" type="button" id="copyButton">Antwort kopieren</button>
             <button class="secondary-action" type="reset">Neu starten</button>
           </div>
           <p id="copyStatus" class="copy-status" aria-live="polite"></p>

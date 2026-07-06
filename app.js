@@ -1,17 +1,7 @@
 const options = {
-  dishes: [
-    "Suppe",
-    "Salat",
-    "Bowl",
-    "Pasta",
-    "Wrap/Sandwich",
-    "Curry/Eintopf",
-    "Ofengericht",
-    "Frühstück",
-    "Dessert/Süßes",
-    "Snack/Kleinigkeit",
-    "Getränk/Smoothie"
-  ],
+  location: ["Bei mir zuhause", "Bei dem Mann", "Woanders"],
+  cook: ["Ja", "Nein"],
+  time: ["Frühstück", "Mittag", "Abend", "Kaffee/Kuchen", "Snack"],
   diet: [
     "Vegan",
     "Vegetarisch",
@@ -29,174 +19,147 @@ const options = {
     "Halal",
     "Koscher"
   ],
-  hunger: [
-    "Keinen Hunger",
-    "Wenig Hunger",
-    "Mittelmäßig Hunger",
-    "Starker Hunger",
-    "Sehr starker Hunger"
+  appetite: ["Sehr wenig", "Wenig", "Mittel", "Viel", "Sehr viel"],
+  taste: [
+    "Würzig",
+    "Salzig",
+    "Süß",
+    "Scharf",
+    "Trocken",
+    "Saftig",
+    "Herzhaft",
+    "Mild",
+    "Frisch",
+    "Cremig",
+    "Knusprig",
+    "Fruchtig"
   ],
-  spice: ["Mild", "Würzig", "Scharf"]
+  breakfast: ["Pfannkuchen", "Brot", "Brötchen", "Süßes Gebäck", "Müsli", "Joghurtspeise", "Obst", "Gemüse"],
+  lunch: [
+    "Suppe",
+    "Salat",
+    "Bowl",
+    "Pasta",
+    "Spaghetti",
+    "Pfannengericht",
+    "Wok-Gericht",
+    "Brotmahlzeit",
+    "Wrap",
+    "Sandwich",
+    "Curry",
+    "Eintopf",
+    "Ofengericht"
+  ]
 };
 
-const ingredientCatalog = {
-  "Suppe": ["Kartoffeln", "Karotten", "Kürbis", "Linsen", "Kichererbsen", "Tomaten", "Kokosmilch", "Ingwer", "Croutons"],
-  "Salat": ["Blattsalat", "Gurke", "Tomaten", "Paprika", "Mais", "Oliven", "Feta", "Avocado", "Kerne"],
-  "Bowl": ["Reis", "Quinoa", "Couscous", "Edamame", "Süßkartoffel", "Avocado", "Tofu", "Falafel", "Sesam"],
-  "Pasta": ["Spaghetti", "Penne", "Gnocchi", "Glutenfreie Pasta", "Tomatensauce", "Pesto", "Pilze", "Spinat", "Parmesan", "Chiliöl"],
-  "Wrap/Sandwich": ["Tortilla", "Mais-Tortilla", "Glutenfreies Brot", "Fladenbrot", "Hummus", "Salat", "Gurke", "Tomate", "Tofu", "Falafel", "Käse"],
-  "Curry/Eintopf": ["Reis", "Kartoffeln", "Kichererbsen", "Linsen", "Kokosmilch", "Spinat", "Blumenkohl", "Tofu", "Koriander"],
-  "Ofengericht": ["Kartoffeln", "Süßkartoffeln", "Gemüse", "Feta", "Käse", "Tomatensauce", "Kichererbsen", "Kräuter", "Knoblauch"],
-  "Frühstück": ["Glutenfreie Haferflocken", "Haferflocken", "Joghurt", "Beeren", "Banane", "Nüsse", "Samen", "Toast", "Glutenfreies Brot", "Avocado", "Rührei"],
-  "Dessert/Süßes": ["Schokolade", "Beeren", "Banane", "Vanille", "Joghurt", "Kokos", "Nüsse", "Keksboden", "Zimt"],
-  "Snack/Kleinigkeit": ["Gemüsesticks", "Hummus", "Nüsse", "Obst", "Glutenfreie Cracker", "Cracker", "Käse", "Oliven", "Dattel", "Dip"],
-  "Getränk/Smoothie": ["Banane", "Beeren", "Mango", "Spinat", "Hafermilch", "Joghurt", "Ingwer", "Minze", "Zitrone"]
-};
-
-const dietIngredientHints = {
-  "Vegan": ["Tofu", "Tempeh", "Hummus", "Kichererbsen", "Hafermilch"],
-  "Vegetarisch": ["Ei", "Feta", "Halloumi", "Joghurt", "Käse"],
-  "Glutenfrei": ["Reis", "Quinoa", "Kartoffeln", "Glutenfreie Pasta", "Mais-Tortilla"],
-  "Laktosefrei": ["Laktosefreier Joghurt", "Hafermilch", "Kokosmilch", "Laktosefreier Käse"],
-  "Fruktosearm": ["Reis", "Kartoffeln", "Gurke", "Spinat", "Naturjoghurt"],
-  "Zuckerarm": ["Beeren", "Nüsse", "Zimt", "Naturjoghurt"],
-  "Zuckerfrei": ["Nüsse", "Samen", "Naturjoghurt", "Gemüsesticks"],
-  "Low Carb": ["Blumenkohlreis", "Zucchini", "Salat", "Tofu", "Ei"],
-  "Proteinreich": ["Linsen", "Bohnen", "Tofu", "Ei", "Joghurt"],
-  "Rohkost": ["Gurke", "Karotte", "Paprika", "Apfel", "Kohlrabi"],
-  "Ohne Nüsse": ["Kerne", "Sesam", "Croutons ohne Nüsse", "Samen"],
-  "Ohne Soja": ["Linsen", "Bohnen", "Falafel", "Ei", "Halloumi"],
-  "Ohne Ei": ["Tofu", "Falafel", "Hummus", "Kichererbsen"],
-  "Halal": ["Falafel", "Kichererbsen", "Gemüse", "Reis", "Linsen"],
-  "Koscher": ["Gemüse", "Reis", "Linsen", "Kichererbsen", "Obst"]
-};
-
-const blockedByDiet = {
-  "Vegan": ["Feta", "Parmesan", "Käse", "Halloumi", "Joghurt", "Naturjoghurt", "Laktosefreier Joghurt", "Laktosefreier Käse", "Rührei", "Ei"],
-  "Glutenfrei": ["Spaghetti", "Penne", "Gnocchi", "Tortilla", "Fladenbrot", "Toast", "Cracker", "Croutons"],
-  "Laktosefrei": ["Feta", "Parmesan", "Käse", "Halloumi", "Joghurt", "Naturjoghurt"],
-  "Ohne Nüsse": ["Nüsse"],
-  "Ohne Soja": ["Tofu", "Tempeh", "Edamame"],
-  "Ohne Ei": ["Ei", "Rührei"],
-  "Zuckerfrei": ["Schokolade", "Keksboden", "Dattel"],
-  "Fruktosearm": ["Apfel", "Mango", "Banane", "Beeren", "Obst", "Dattel"]
-};
+const singleChoiceGroups = new Set(["location", "cook", "appetite"]);
 
 const state = {
-  dishes: new Set(),
+  date: "",
+  customLocation: "",
+  location: "",
+  cook: "",
+  time: new Set(),
   diet: new Set(),
-  ingredients: new Set(),
-  hunger: "",
-  spice: ""
+  appetite: "",
+  taste: new Set(),
+  breakfast: new Set(),
+  lunch: new Set()
 };
 
-const stepNames = ["Gericht", "Ernährung", "Hunger", "Schärfe", "Zutaten", "Fertig"];
 let currentStep = 0;
 
-const form = document.querySelector("#foodForm");
+const form = document.querySelector("#dateForm");
 const progressFill = document.querySelector("#progressFill");
 const stepCount = document.querySelector("#stepCount");
 const summary = document.querySelector("#summary");
-const ingredientHint = document.querySelector("#ingredientHint");
-const ingredientGroups = document.querySelector("#ingredientGroups");
-const customRequest = document.querySelector("#customRequest");
 const copyButton = document.querySelector("#copyButton");
 const copyStatus = document.querySelector("#copyStatus");
 const backButton = document.querySelector("#backButton");
 const nextButton = document.querySelector("#nextButton");
+const dateInput = document.querySelector("#dateInput");
+const customLocation = document.querySelector("#customLocation");
 
-function createChip(label, group, singleChoice = false) {
+function createChip(label, group) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "chip";
   button.textContent = label;
   button.setAttribute("aria-pressed", "false");
   button.addEventListener("click", () => {
-    if (singleChoice) {
+    if (singleChoiceGroups.has(group)) {
       state[group] = state[group] === label ? "" : label;
     } else {
       const selected = state[group];
       selected.has(label) ? selected.delete(label) : selected.add(label);
     }
+    keepStepInRange();
     render();
   });
   return button;
 }
 
-function renderOptionGroup(group, singleChoice = false) {
+function renderOptionGroup(group) {
   const target = document.querySelector(`[data-group="${group}"]`);
   target.innerHTML = "";
-  options[group].forEach((label) => target.append(createChip(label, group, singleChoice)));
+  options[group].forEach((label) => target.append(createChip(label, group)));
 }
 
-function filterIngredients(items) {
-  const blocked = new Set();
-  state.diet.forEach((diet) => {
-    (blockedByDiet[diet] || []).forEach((item) => blocked.add(item));
-  });
-  return items.filter((item) => !blocked.has(item));
-}
+function getActiveSteps() {
+  const steps = ["date", "location"];
+  const isHomeDate = state.location === "Bei mir zuhause" || state.location === "Bei dem Mann";
 
-function getSuggestedIngredients() {
-  const groups = [];
-  state.dishes.forEach((dish) => {
-    groups.push({ title: dish, items: filterIngredients(ingredientCatalog[dish] || []) });
-  });
-
-  const dietItems = new Set();
-  state.diet.forEach((diet) => {
-    filterIngredients(dietIngredientHints[diet] || []).forEach((item) => dietItems.add(item));
-  });
-
-  if (dietItems.size) {
-    groups.push({ title: "Passend zu Ernährung", items: [...dietItems] });
+  if (isHomeDate) {
+    steps.push("cook");
   }
-  return groups;
-}
 
-function syncSelectedIngredientsWithDiet() {
-  state.ingredients.forEach((item) => {
-    if (!filterIngredients([item]).length) {
-      state.ingredients.delete(item);
+  if (!isHomeDate || state.cook === "Nein") {
+    steps.push("final");
+    return steps;
+  }
+
+  if (state.cook === "Ja") {
+    steps.push("time", "diet", "appetite", "taste");
+    if (state.time.has("Frühstück")) {
+      steps.push("breakfast");
     }
-  });
+    if (state.time.has("Mittag")) {
+      steps.push("lunch");
+    }
+    steps.push("final");
+  }
+
+  return steps;
 }
 
-function renderIngredients() {
-  syncSelectedIngredientsWithDiet();
-  const groups = getSuggestedIngredients();
-  ingredientGroups.innerHTML = "";
-  ingredientHint.textContent = groups.length ? "Zutaten anklicken, die dabei sein sollen." : "Wähle erst ein Gericht aus.";
+function getStepLabel(step) {
+  const labels = {
+    date: "Datum",
+    location: "Ort",
+    cook: "Kochen/Backen",
+    time: "Tageszeit",
+    diet: "Ernährung",
+    appetite: "Menge",
+    taste: "Geschmack",
+    breakfast: "Frühstück",
+    lunch: "Mittag",
+    final: "Fertig"
+  };
+  return labels[step] || step;
+}
 
-  groups.forEach((group) => {
-    const section = document.createElement("div");
-    section.className = "ingredient-group";
-
-    const title = document.createElement("div");
-    title.className = "ingredient-title";
-    title.innerHTML = `<h3>${group.title}</h3><span>${group.items.length} Vorschläge</span>`;
-
-    const chips = document.createElement("div");
-    chips.className = "chip-grid";
-    group.items.forEach((item) => chips.append(createChip(item, "ingredients")));
-
-    section.append(title, chips);
-    ingredientGroups.append(section);
-  });
+function keepStepInRange() {
+  const steps = getActiveSteps();
+  currentStep = Math.min(currentStep, steps.length - 1);
 }
 
 function updatePressedStates() {
   document.querySelectorAll(".chip").forEach((chip) => {
-    const label = chip.textContent;
     const group = chip.closest("[data-group]")?.dataset.group;
-    const inIngredients = chip.closest(".ingredient-group");
+    const label = chip.textContent;
+    if (!group) return;
 
-    if (inIngredients) {
-      chip.setAttribute("aria-pressed", state.ingredients.has(label));
-      return;
-    }
-
-    if (group === "hunger" || group === "spice") {
+    if (singleChoiceGroups.has(group)) {
       chip.setAttribute("aria-pressed", state[group] === label);
       return;
     }
@@ -209,37 +172,64 @@ function formatList(values, fallback) {
   return values.length ? values.join(", ") : fallback;
 }
 
+function formatDate(value) {
+  if (!value) return "noch nicht ausgewählt";
+  const [year, month, day] = value.split("-");
+  return `${day}.${month}.${year}`;
+}
+
 function buildSummary() {
   const lines = [
-    `Gericht: ${formatList([...state.dishes], "noch offen")}`,
-    `Ernährung/Besonderheiten: ${formatList([...state.diet], "keine Angabe")}`,
-    `Hunger: ${state.hunger || "keine Angabe"}`,
-    `Schärfe: ${state.spice || "keine Angabe"}`,
-    `Zutaten: ${formatList([...state.ingredients], "noch keine ausgewählt")}`
+    `Date: ${formatDate(state.date)}`,
+    `Ort: ${state.location || "noch offen"}${state.customLocation ? ` (${state.customLocation})` : ""}`
   ];
 
-  const note = customRequest.value.trim();
-  if (note) {
-    lines.push(`Eigene Angabe: ${note}`);
+  const isHomeDate = state.location === "Bei mir zuhause" || state.location === "Bei dem Mann";
+
+  if (!isHomeDate || state.cook === "Nein") {
+    lines.push("Ich freue mich auf das Date mit dir! <3");
+    return lines.join("\n");
+  }
+
+  if (state.cook === "Ja") {
+    lines.push(
+      "Kochen/Backen: Ja",
+      `Tageszeit: ${formatList([...state.time], "noch offen")}`,
+      `Ernährung/Besonderheiten: ${formatList([...state.diet], "keine Angabe")}`,
+      `Menge: ${state.appetite || "keine Angabe"}`,
+      `Geschmack: ${formatList([...state.taste], "keine Angabe")}`
+    );
+
+    if (state.time.has("Frühstück")) {
+      lines.push(`Frühstückswunsch: ${formatList([...state.breakfast], "noch offen")}`);
+    }
+
+    if (state.time.has("Mittag")) {
+      lines.push(`Mittagswunsch: ${formatList([...state.lunch], "noch offen")}`);
+    }
+  } else if (isHomeDate) {
+    lines.push("Kochen/Backen: noch offen");
   }
 
   return lines.join("\n");
 }
 
 function renderStep() {
-  document.querySelectorAll(".step-panel").forEach((panel, index) => {
-    panel.classList.toggle("is-active", index === currentStep);
+  const steps = getActiveSteps();
+  const activeStep = steps[currentStep];
+
+  document.querySelectorAll(".step-panel").forEach((panel) => {
+    panel.classList.toggle("is-active", panel.dataset.step === activeStep);
   });
 
-  const progress = ((currentStep + 1) / stepNames.length) * 100;
+  const progress = ((currentStep + 1) / steps.length) * 100;
   progressFill.style.width = `${progress}%`;
-  stepCount.textContent = `Schritt ${currentStep + 1} von ${stepNames.length}: ${stepNames[currentStep]}`;
+  stepCount.textContent = `Schritt ${currentStep + 1} von ${steps.length}: ${getStepLabel(activeStep)}`;
   backButton.disabled = currentStep === 0;
-  nextButton.textContent = currentStep === stepNames.length - 1 ? "Zum Anfang" : "Weiter";
+  nextButton.textContent = activeStep === "final" ? "Zum Anfang" : "Weiter";
 }
 
 function render() {
-  renderIngredients();
   updatePressedStates();
   summary.textContent = buildSummary();
   copyStatus.textContent = "";
@@ -247,21 +237,33 @@ function render() {
 }
 
 function resetState() {
-  state.dishes.clear();
+  state.date = "";
+  state.customLocation = "";
+  state.location = "";
+  state.cook = "";
+  state.time.clear();
   state.diet.clear();
-  state.ingredients.clear();
-  state.hunger = "";
-  state.spice = "";
+  state.taste.clear();
+  state.breakfast.clear();
+  state.lunch.clear();
+  state.appetite = "";
   currentStep = 0;
-  customRequest.value = "";
+  dateInput.value = "";
+  customLocation.value = "";
   render();
 }
 
-Object.keys(options).forEach((group) => {
-  renderOptionGroup(group, group === "hunger" || group === "spice");
+Object.keys(options).forEach(renderOptionGroup);
+
+dateInput.addEventListener("input", () => {
+  state.date = dateInput.value;
+  render();
 });
 
-customRequest.addEventListener("input", render);
+customLocation.addEventListener("input", () => {
+  state.customLocation = customLocation.value.trim();
+  render();
+});
 
 backButton.addEventListener("click", () => {
   currentStep = Math.max(0, currentStep - 1);
@@ -269,10 +271,11 @@ backButton.addEventListener("click", () => {
 });
 
 nextButton.addEventListener("click", () => {
-  if (currentStep === stepNames.length - 1) {
+  const steps = getActiveSteps();
+  if (steps[currentStep] === "final") {
     currentStep = 0;
   } else {
-    currentStep += 1;
+    currentStep = Math.min(steps.length - 1, currentStep + 1);
   }
   render();
 });
