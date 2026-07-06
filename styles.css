@@ -26,7 +26,8 @@ body {
 }
 
 button,
-textarea {
+textarea,
+input {
   font: inherit;
 }
 
@@ -249,7 +250,23 @@ textarea {
   font-weight: 400;
 }
 
+input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  padding: 10px 12px;
+  font-weight: 400;
+}
+
+.date-field {
+  max-width: 360px;
+}
+
 textarea:focus,
+input:focus,
 .chip:focus-visible,
 .primary-action:focus-visible,
 .secondary-action:focus-visible {
