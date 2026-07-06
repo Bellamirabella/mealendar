@@ -218,6 +218,7 @@ const form = document.querySelector("#dateForm");
 const progressFill = document.querySelector("#progressFill");
 const stepCount = document.querySelector("#stepCount");
 const summary = document.querySelector("#summary");
+const finalTitle = document.querySelector("#finalTitle");
 const copyButton = document.querySelector("#copyButton");
 const copyStatus = document.querySelector("#copyStatus");
 const backButton = document.querySelector("#backButton");
@@ -346,7 +347,6 @@ function buildSummary() {
   const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
 
   if (!isHomeDate || state.cook === "Nein") {
-    lines.push("Ich freue mich auf unser Date! <3");
     return lines.join("\n");
   }
 
@@ -389,6 +389,7 @@ function buildSummary() {
 function renderStep() {
   const steps = getActiveSteps();
   const activeStep = steps[currentStep];
+  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
 
   document.querySelectorAll(".step-panel").forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.step === activeStep);
@@ -399,6 +400,7 @@ function renderStep() {
   stepCount.textContent = `Schritt ${currentStep + 1} von ${steps.length}: ${getStepLabel(activeStep)}`;
   backButton.disabled = currentStep === 0;
   nextButton.textContent = activeStep === "final" ? "Zum Anfang" : "Weiter";
+  finalTitle.textContent = (!isHomeDate || state.cook === "Nein") ? "Ich freue mich auf unser Date!" : "Fertig";
 }
 
 function render() {
