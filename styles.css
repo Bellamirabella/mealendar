@@ -19,10 +19,37 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(217, 111, 60, 0.18), transparent 34rem),
-    linear-gradient(135deg, #f7f2eb 0%, #efe6da 48%, #f9f5ef 100%);
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.8) 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.7) 0 0.35rem, transparent 0.4rem),
+    radial-gradient(circle at 18% 78%, rgba(255, 255, 255, 0.7) 0 0.4rem, transparent 0.45rem),
+    radial-gradient(circle at top left, rgba(217, 65, 105, 0.24), transparent 34rem),
+    linear-gradient(135deg, #ffe6ee 0%, #ffd2df 48%, #fff1f5 100%);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before,
+body::after {
+  position: fixed;
+  z-index: -1;
+  color: rgba(184, 43, 84, 0.18);
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 1;
+  pointer-events: none;
+}
+
+body::before {
+  content: "<3";
+  top: 7vh;
+  right: 6vw;
+  transform: rotate(12deg);
+}
+
+body::after {
+  content: "<3";
+  left: 5vw;
+  bottom: 8vh;
+  transform: rotate(-14deg);
 }
 
 button,
@@ -331,6 +358,12 @@ input:focus,
 .copy-status {
   min-height: 22px;
   margin: 10px 0 0;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.final-note {
+  margin: 0 0 12px;
   color: var(--accent-dark);
   font-weight: 700;
 }
