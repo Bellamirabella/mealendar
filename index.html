@@ -11,7 +11,7 @@
       <section class="hero">
         <div>
           <p class="eyebrow">Date-Planung</p>
-          <h1>Was darf ich für unser Date vorbereiten?</h1>
+          <h1>Hey mein Schatz, was soll ich vorbereiten?</h1>
         </div>
         <div class="plate-art" aria-hidden="true">
           <span></span>
@@ -44,7 +44,7 @@
           </div>
           <div class="chip-grid" data-group="location"></div>
           <label class="field">
-            <span>Falls woanders: wo?</span>
+            <span>Spezifiziere woanders</span>
             <input id="customLocation" type="text" placeholder="z.B. Park, Restaurant, See">
           </label>
         </section>
@@ -113,11 +113,36 @@
           <div class="chip-grid" data-group="lunch"></div>
         </section>
 
+        <section class="step-panel" data-step="dinner">
+          <div class="section-heading">
+            <h2>Was würdest du gerne zum Abendbrot essen?</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="dinner"></div>
+        </section>
+
+        <section class="step-panel" data-step="warmDinner">
+          <div class="section-heading">
+            <h2>Welches warme Gericht?</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="warmDinner"></div>
+        </section>
+
+        <section class="step-panel" data-step="snack">
+          <div class="section-heading">
+            <h2>Was möchtest du als Snack?</h2>
+            <p>Mehrfachauswahl möglich.</p>
+          </div>
+          <div class="chip-grid" data-group="snack"></div>
+        </section>
+
         <section class="step-panel" data-step="final">
           <div class="section-heading">
             <h2>Fertig</h2>
             <p>Diese Antwort kannst du kopieren.</p>
           </div>
+          <p class="final-note">Bitte kopiere diesen Text und schick ihn mir per Nachricht.</p>
           <div id="summary" class="summary-box"></div>
           <div class="actions final-actions">
             <button class="primary-action" type="button" id="copyButton">Antwort kopieren</button>

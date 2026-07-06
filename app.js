@@ -1,5 +1,5 @@
 const options = {
-  location: ["Bei mir zuhause", "Bei dem Mann", "Woanders"],
+  location: ["Bei mir", "Bei dir", "Woanders"],
   cook: ["Ja", "Nein"],
   time: ["Frühstück", "Mittag", "Abend", "Kaffee/Kuchen", "Snack"],
   diet: [
@@ -34,7 +34,7 @@ const options = {
     "Knusprig",
     "Fruchtig"
   ],
-  breakfast: ["Pfannkuchen", "Brot", "Brötchen", "Süßes Gebäck", "Müsli", "Joghurtspeise", "Obst", "Gemüse"],
+  breakfast: ["Pfannkuchen", "Brot", "Brötchen", "Knäckebrot", "Süßes Gebäck", "Müsli", "Joghurtspeise", "Obst", "Gemüse"],
   lunch: [
     "Suppe",
     "Salat",
@@ -49,7 +49,10 @@ const options = {
     "Curry",
     "Eintopf",
     "Ofengericht"
-  ]
+  ],
+  dinner: ["Brotmahlzeit", "Suppe", "Warmes Gericht", "Salat", "Rohkost"],
+  warmDinner: ["Suppe", "Pasta", "Spaghetti", "Pfannengericht", "Wok-Gericht", "Curry", "Eintopf", "Ofengericht"],
+  snack: ["Süßigkeiten", "Obst", "Gemüse", "Gebäck", "Was Herzhaftes", "Cracker", "Nüsse", "Trockenfrüchte", "Chips", "Dip"]
 };
 
 const veganFoods = [
@@ -203,7 +206,10 @@ const state = {
   appetite: "",
   taste: new Set(),
   breakfast: new Set(),
-  lunch: new Set()
+  lunch: new Set(),
+  dinner: new Set(),
+  warmDinner: new Set(),
+  snack: new Set()
 };
 
 let currentStep = 0;
@@ -246,7 +252,7 @@ function renderOptionGroup(group) {
 
 function getActiveSteps() {
   const steps = ["date", "location"];
-  const isHomeDate = state.location === "Bei mir zuhause" || state.location === "Bei dem Mann";
+  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
 
   if (isHomeDate) {
     steps.push("cook");
@@ -264,6 +270,15 @@ function getActiveSteps() {
     }
     if (state.time.has("Mittag")) {
       steps.push("lunch");
+    }
+    if (state.time.has("Abend")) {
+      steps.push("dinner");
+      if (state.dinner.has("Warmes Gericht")) {
+        steps.push("warmDinner");
+      }
+    }
+    if (state.time.has("Snack")) {
+      steps.push("snack");
     }
     steps.push("likedFoods");
     steps.push("final");
@@ -284,6 +299,9 @@ function getStepLabel(step) {
     taste: "Geschmack",
     breakfast: "Frühstück",
     lunch: "Mittag",
+    dinner: "Abendbrot",
+    warmDinner: "Warmes Gericht",
+    snack: "Snack",
     final: "Fertig"
   };
   return labels[step] || step;
@@ -325,10 +343,10 @@ function buildSummary() {
     `Ort: ${state.location || "noch offen"}${state.customLocation ? ` (${state.customLocation})` : ""}`
   ];
 
-  const isHomeDate = state.location === "Bei mir zuhause" || state.location === "Bei dem Mann";
+  const isHomeDate = state.location === "Bei mir" || state.location === "Bei dir";
 
   if (!isHomeDate || state.cook === "Nein") {
-    lines.push("Ich freue mich auf das Date mit dir! <3");
+    lines.push("Ich freue mich auf unser Date! <3");
     return lines.join("\n");
   }
 
@@ -347,6 +365,17 @@ function buildSummary() {
 
     if (state.time.has("Mittag")) {
       lines.push(`Mittagswunsch: ${formatList([...state.lunch], "noch offen")}`);
+    }
+
+    if (state.time.has("Abend")) {
+      lines.push(`Abendbrotwunsch: ${formatList([...state.dinner], "noch offen")}`);
+      if (state.dinner.has("Warmes Gericht")) {
+        lines.push(`Warmes Gericht: ${formatList([...state.warmDinner], "noch offen")}`);
+      }
+    }
+
+    if (state.time.has("Snack")) {
+      lines.push(`Snackwunsch: ${formatList([...state.snack], "noch offen")}`);
     }
 
     lines.push(`Lebensmittel, die ich mag: ${formatList([...state.likedFoods], "keine ausgewählt")}`);
@@ -390,6 +419,9 @@ function resetState() {
   state.taste.clear();
   state.breakfast.clear();
   state.lunch.clear();
+  state.dinner.clear();
+  state.warmDinner.clear();
+  state.snack.clear();
   state.appetite = "";
   currentStep = 0;
   dateInput.value = "";
