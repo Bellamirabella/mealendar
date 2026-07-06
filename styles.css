@@ -323,6 +323,12 @@ input:focus,
   font-weight: 700;
 }
 
+.vegan-disclaimer {
+  margin: -4px 0 16px;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
 @media (max-width: 760px) {
   .app-shell {
     width: min(100% - 20px, 980px);
