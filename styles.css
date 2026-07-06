@@ -19,11 +19,10 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.8) 0 0.45rem, transparent 0.5rem),
-    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.7) 0 0.35rem, transparent 0.4rem),
-    radial-gradient(circle at 18% 78%, rgba(255, 255, 255, 0.7) 0 0.4rem, transparent 0.45rem),
-    radial-gradient(circle at top left, rgba(217, 65, 105, 0.24), transparent 34rem),
-    linear-gradient(135deg, #ffe6ee 0%, #ffd2df 48%, #fff1f5 100%);
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.65) 0 0.35rem, transparent 0.4rem),
+    radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.55) 0 0.3rem, transparent 0.36rem),
+    radial-gradient(circle at top left, rgba(255, 74, 119, 0.42), transparent 34rem),
+    linear-gradient(135deg, #ffb6ca 0%, #ff6f98 48%, #ffd3df 100%);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -32,21 +31,21 @@ body::before,
 body::after {
   position: fixed;
   z-index: -1;
-  color: rgba(184, 43, 84, 0.18);
+  color: rgba(150, 0, 52, 0.22);
   font-size: clamp(4rem, 10vw, 9rem);
   line-height: 1;
   pointer-events: none;
 }
 
 body::before {
-  content: "<3";
+  content: "♥";
   top: 7vh;
   right: 6vw;
   transform: rotate(12deg);
 }
 
 body::after {
-  content: "<3";
+  content: "♥";
   left: 5vw;
   bottom: 8vh;
   transform: rotate(-14deg);
@@ -65,11 +64,8 @@ input {
 }
 
 .hero {
-  min-height: 190px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px;
-  align-items: center;
-  gap: 24px;
+  min-height: 170px;
+  display: block;
   padding: 22px 0 18px;
 }
 
@@ -101,47 +97,6 @@ h2 {
   font-size: clamp(1.55rem, 4vw, 2.45rem);
   line-height: 1.05;
   letter-spacing: 0;
-}
-
-.plate-art {
-  width: 178px;
-  aspect-ratio: 1;
-  border: 12px solid #ffffff;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 44% 48%, #f7d46c 0 18%, transparent 19%),
-    radial-gradient(circle at 62% 38%, #2f7d5f 0 11%, transparent 12%),
-    radial-gradient(circle at 34% 63%, #b85a69 0 12%, transparent 13%),
-    radial-gradient(circle at 66% 69%, #d96f3c 0 13%, transparent 14%),
-    #fef7ef;
-  box-shadow: var(--shadow);
-  position: relative;
-}
-
-.plate-art span {
-  position: absolute;
-  width: 52px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(35, 31, 32, 0.15);
-}
-
-.plate-art span:nth-child(1) {
-  left: 38px;
-  top: 60px;
-  transform: rotate(-18deg);
-}
-
-.plate-art span:nth-child(2) {
-  right: 30px;
-  top: 92px;
-  transform: rotate(22deg);
-}
-
-.plate-art span:nth-child(3) {
-  left: 58px;
-  bottom: 48px;
-  transform: rotate(8deg);
 }
 
 .wizard {
@@ -378,10 +333,6 @@ input:focus,
     min-height: 180px;
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  .plate-art {
-    width: min(160px, 50vw);
   }
 
   .section-heading {
