@@ -7,7 +7,17 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="app-shell">
+    <section id="introScreen" class="intro-screen">
+      <div class="intro-content">
+        <h1 id="typedIntro" class="typed-intro"></h1>
+        <div id="readyChoices" class="ready-choices" hidden>
+          <button class="primary-action" type="button" id="readyYes">Ja</button>
+          <button class="secondary-action runaway-button" type="button" id="readyNo">Nein</button>
+        </div>
+      </div>
+    </section>
+
+    <main id="appShell" class="app-shell is-hidden">
       <section class="hero">
         <div>
           <p class="eyebrow">Date-Planung</p>
@@ -24,7 +34,6 @@
         <section class="step-panel is-active" data-step="date">
           <div class="section-heading">
             <h2>Wann ist unser Date?</h2>
-            <p>Wähle zuerst den Tag aus.</p>
           </div>
           <label class="field date-field">
             <span>Tag des Dates</span>
@@ -99,6 +108,10 @@
             <p>Mehrfachauswahl möglich.</p>
           </div>
           <div class="chip-grid" data-group="breakfast"></div>
+          <label class="field">
+            <span>Genauer Frühstückswunsch</span>
+            <textarea id="breakfastNote" rows="3" placeholder="z.B. Pfannkuchen mit Beeren, Brötchen mit veganer Butter"></textarea>
+          </label>
         </section>
 
         <section class="step-panel" data-step="lunch">
@@ -107,6 +120,10 @@
             <p>Mehrfachauswahl möglich.</p>
           </div>
           <div class="chip-grid" data-group="lunch"></div>
+          <label class="field">
+            <span>Genauer Mittagswunsch</span>
+            <textarea id="lunchNote" rows="3" placeholder="z.B. Pasta mit Tomatensauce, Bowl mit Tofu"></textarea>
+          </label>
         </section>
 
         <section class="step-panel" data-step="dinner">
@@ -115,6 +132,10 @@
             <p>Mehrfachauswahl möglich.</p>
           </div>
           <div class="chip-grid" data-group="dinner"></div>
+          <label class="field">
+            <span>Genauer Abendbrotwunsch</span>
+            <textarea id="dinnerNote" rows="3" placeholder="z.B. Brotmahlzeit mit Rohkost, Suppe mit Brot"></textarea>
+          </label>
         </section>
 
         <section class="step-panel" data-step="warmDinner">
@@ -123,6 +144,10 @@
             <p>Mehrfachauswahl möglich.</p>
           </div>
           <div class="chip-grid" data-group="warmDinner"></div>
+          <label class="field">
+            <span>Genauer Wunsch zum warmen Abendessen</span>
+            <textarea id="warmDinnerNote" rows="3" placeholder="z.B. Curry mit Reis, Wok-Gemüse mit Nudeln"></textarea>
+          </label>
         </section>
 
         <section class="step-panel" data-step="snack">
@@ -131,6 +156,10 @@
             <p>Mehrfachauswahl möglich.</p>
           </div>
           <div class="chip-grid" data-group="snack"></div>
+          <label class="field">
+            <span>Genauer Snackwunsch</span>
+            <textarea id="snackNote" rows="3" placeholder="z.B. Obstteller, Cracker mit Dip, etwas Süßes"></textarea>
+          </label>
         </section>
 
         <section class="step-panel" data-step="final">

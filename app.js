@@ -38,6 +38,7 @@ const options = {
     "Bowl",
     "Pasta",
     "Spaghetti",
+    "Pizza",
     "Pfannengericht",
     "Wok-Gericht",
     "Brotmahlzeit",
@@ -48,7 +49,7 @@ const options = {
     "Ofengericht"
   ],
   dinner: ["Brotmahlzeit", "Suppe", "Warmes Gericht", "Salat", "Rohkost"],
-  warmDinner: ["Suppe", "Pasta", "Spaghetti", "Pfannengericht", "Wok-Gericht", "Curry", "Eintopf", "Ofengericht"],
+  warmDinner: ["Suppe", "Pasta", "Spaghetti", "Pizza", "Pfannengericht", "Wok-Gericht", "Curry", "Eintopf", "Ofengericht"],
   snack: ["Süßigkeiten", "Obst", "Gemüse", "Gebäck", "Was Herzhaftes", "Cracker", "Nüsse", "Trockenfrüchte", "Chips", "Dip"]
 };
 
@@ -154,6 +155,7 @@ const veganFoods = [
     "Vegane Creme fraiche",
     "Veganer Käse",
     "Veganer Frischkäse",
+    "Vegane Butter",
     "Olivenöl",
     "Rapsöl",
     "Sesamöl",
@@ -205,12 +207,27 @@ const state = {
   lunch: new Set(),
   dinner: new Set(),
   warmDinner: new Set(),
-  snack: new Set()
+  snack: new Set(),
+  breakfastNote: "",
+  lunchNote: "",
+  dinnerNote: "",
+  warmDinnerNote: "",
+  snackNote: ""
 };
 
 let currentStep = 0;
+let appStarted = false;
+let lastTypedStep = "";
+let questionTypeToken = 0;
+let readyYesScale = 1;
 
 const form = document.querySelector("#dateForm");
+const introScreen = document.querySelector("#introScreen");
+const appShell = document.querySelector("#appShell");
+const typedIntro = document.querySelector("#typedIntro");
+const readyChoices = document.querySelector("#readyChoices");
+const readyYes = document.querySelector("#readyYes");
+const readyNo = document.querySelector("#readyNo");
 const progressFill = document.querySelector("#progressFill");
 const stepCount = document.querySelector("#stepCount");
 const summary = document.querySelector("#summary");
@@ -221,6 +238,69 @@ const backButton = document.querySelector("#backButton");
 const nextButton = document.querySelector("#nextButton");
 const dateInput = document.querySelector("#dateInput");
 const customLocation = document.querySelector("#customLocation");
+const noteInputs = {
+  breakfastNote: document.querySelector("#breakfastNote"),
+  lunchNote: document.querySelector("#lunchNote"),
+  dinnerNote: document.querySelector("#dinnerNote"),
+  warmDinnerNote: document.querySelector("#warmDinnerNote"),
+  snackNote: document.querySelector("#snackNote")
+};
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function typeText(text, speed = 58) {
+  typedIntro.textContent = "";
+  for (const char of text) {
+    typedIntro.textContent += char;
+    await wait(speed);
+  }
+}
+
+async function typeIntoElement(element, text, speed = 38) {
+  const token = ++questionTypeToken;
+  element.textContent = "";
+  for (const char of text) {
+    if (token !== questionTypeToken) return false;
+    element.textContent += char;
+    await wait(speed);
+  }
+  return token === questionTypeToken;
+}
+
+async function eraseText(speed = 28) {
+  while (typedIntro.textContent.length) {
+    typedIntro.textContent = typedIntro.textContent.slice(0, -1);
+    await wait(speed);
+  }
+}
+
+async function runIntro() {
+  await typeText("Hellooooo...Ich habe ein paar kurze Fragen an dich.");
+  await wait(900);
+  await eraseText();
+  await typeText("Bereit?", 72);
+  readyChoices.hidden = false;
+}
+
+function showApp() {
+  appStarted = true;
+  lastTypedStep = "";
+  introScreen.classList.add("is-hidden");
+  appShell.classList.remove("is-hidden");
+  render();
+}
+
+function moveRunawayButton() {
+  readyYesScale = Math.min(2.15, readyYesScale + 0.18);
+  readyYes.style.transform = `scale(${readyYesScale})`;
+  const maxX = Math.max(0, window.innerWidth - readyNo.offsetWidth - 24);
+  const maxY = Math.max(0, window.innerHeight - readyNo.offsetHeight - 24);
+  readyNo.classList.add("is-running");
+  readyNo.style.left = `${Math.floor(Math.random() * maxX)}px`;
+  readyNo.style.top = `${Math.floor(Math.random() * maxY)}px`;
+}
 
 function createChip(label, group) {
   const button = document.createElement("button");
@@ -362,21 +442,26 @@ function buildSummary() {
 
     if (state.time.has("Frühstück")) {
       lines.push(`<strong>Frühstückswunsch:</strong> ${formatList([...state.breakfast], "noch offen")}`);
+      if (state.breakfastNote) lines.push(`<strong>Genauer Frühstückswunsch:</strong> ${state.breakfastNote}`);
     }
 
     if (state.time.has("Mittag")) {
       lines.push(`<strong>Mittagswunsch:</strong> ${formatList([...state.lunch], "noch offen")}`);
+      if (state.lunchNote) lines.push(`<strong>Genauer Mittagswunsch:</strong> ${state.lunchNote}`);
     }
 
     if (state.time.has("Abend")) {
       lines.push(`<strong>Abendbrotwunsch:</strong> ${formatList([...state.dinner], "noch offen")}`);
+      if (state.dinnerNote) lines.push(`<strong>Genauer Abendbrotwunsch:</strong> ${state.dinnerNote}`);
       if (state.dinner.has("Warmes Gericht")) {
         lines.push(`<strong>Warmes Gericht:</strong> ${formatList([...state.warmDinner], "noch offen")}`);
+        if (state.warmDinnerNote) lines.push(`<strong>Genauer Wunsch zum warmen Abendessen:</strong> ${state.warmDinnerNote}`);
       }
     }
 
     if (state.time.has("Snacktime")) {
       lines.push(`<strong>Snackwunsch:</strong> ${formatList([...state.snack], "noch offen")}`);
+      if (state.snackNote) lines.push(`<strong>Genauer Snackwunsch:</strong> ${state.snackNote}`);
     }
 
     lines.push(`<strong>Lebensmittel, die ich mag:</strong> ${formatList([...state.likedFoods], "keine ausgewählt")}`);
@@ -391,6 +476,7 @@ function renderStep() {
   const steps = getActiveSteps();
   const activeStep = steps[currentStep];
   const isHomeDate = state.location === "Bei Vanessa" || state.location === "Bei mir";
+  finalTitle.textContent = (!isHomeDate || state.cook === "Nein") ? "Ich freue mich auf unser Date!" : "Fertig. Ich freue mich auf Dich.";
 
   document.querySelectorAll(".step-panel").forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.step === activeStep);
@@ -401,7 +487,27 @@ function renderStep() {
   stepCount.textContent = `Schritt ${currentStep + 1} von ${steps.length}: ${getStepLabel(activeStep)}`;
   backButton.disabled = currentStep === 0;
   nextButton.textContent = activeStep === "final" ? "Zum Anfang" : "Weiter";
-  finalTitle.textContent = (!isHomeDate || state.cook === "Nein") ? "Ich freue mich auf unser Date!" : "Fertig. Ich freue mich auf Dich.";
+
+  const activePanel = document.querySelector(`.step-panel[data-step="${activeStep}"]`);
+  if (appStarted && activePanel && lastTypedStep !== activeStep) {
+    const title = activePanel.querySelector("h2");
+    if (activeStep === "final" && title) {
+      title.dataset.fullQuestion = finalTitle.textContent;
+    }
+    const question = title?.dataset.fullQuestion || title?.textContent || "";
+    if (title) {
+      title.dataset.fullQuestion = question;
+      activePanel.classList.remove("question-ready");
+      lastTypedStep = activeStep;
+      typeIntoElement(title, question).then((finished) => {
+        if (finished && document.querySelector(".step-panel.is-active") === activePanel) {
+          activePanel.classList.add("question-ready");
+        }
+      });
+    }
+  } else if (activePanel && lastTypedStep === activeStep) {
+    activePanel.classList.add("question-ready");
+  }
 }
 
 function render() {
@@ -425,14 +531,32 @@ function resetState() {
   state.dinner.clear();
   state.warmDinner.clear();
   state.snack.clear();
+  state.breakfastNote = "";
+  state.lunchNote = "";
+  state.dinnerNote = "";
+  state.warmDinnerNote = "";
+  state.snackNote = "";
   state.appetite = "";
   currentStep = 0;
+  lastTypedStep = "";
   dateInput.value = "";
   customLocation.value = "";
+  Object.values(noteInputs).forEach((input) => {
+    input.value = "";
+  });
   render();
 }
 
 Object.keys(options).forEach(renderOptionGroup);
+
+runIntro();
+readyYes.addEventListener("click", showApp);
+["mouseenter", "focus", "pointerdown", "touchstart", "click"].forEach((eventName) => {
+  readyNo.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    moveRunawayButton();
+  });
+});
 
 dateInput.addEventListener("input", () => {
   state.date = dateInput.value;
@@ -442,6 +566,13 @@ dateInput.addEventListener("input", () => {
 customLocation.addEventListener("input", () => {
   state.customLocation = customLocation.value.trim();
   render();
+});
+
+Object.entries(noteInputs).forEach(([key, input]) => {
+  input.addEventListener("input", () => {
+    state[key] = input.value.trim();
+    render();
+  });
 });
 
 backButton.addEventListener("click", () => {
