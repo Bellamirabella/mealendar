@@ -174,6 +174,32 @@ input {
   }
 }
 
+@keyframes arrowBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes copyButtonGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(217, 0, 79, 0.68), 0 0 18px rgba(255, 255, 255, 0.74);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 12px rgba(217, 0, 79, 0), 0 0 38px rgba(255, 255, 255, 1);
+    filter: brightness(1.25);
+  }
+}
+
 .app-shell {
   width: min(980px, calc(100% - 32px));
   margin: 0 auto;
@@ -398,7 +424,17 @@ input:focus,
 }
 
 .final-actions {
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.copy-target {
+  display: grid;
+  justify-items: center;
+}
+
+#copyButton {
+  animation: copyButtonGlow 0.9s ease-in-out infinite;
 }
 
 .primary-action,
